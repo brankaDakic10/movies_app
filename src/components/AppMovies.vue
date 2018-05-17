@@ -1,20 +1,27 @@
 <template>
-    <div class="container">
-        All Movies
+    <div class="container mt-4">
+        
         <movie-form :movieForm="newMovie" 
          @onSubmit="storeMovie"
          @onReset="resetForm"
         ></movie-form>
+        <section class="container mt-4">
+        <h4>List of Movies</h4>
+        <movie-row v-for="movie in movies" :key="movie.id"
+        :movie="movie"></movie-row>
+        </section>
     </div>
 </template>
 
 <script>
 import { moviesService } from '../services/MoviesService'
 import MovieForm from './MovieForm.vue'
+import MovieRow from './MovieRow.vue'
 export default {
     name:'AppMovies',
     components:{
-        MovieForm
+        MovieForm,
+        MovieRow
     },
     data(){
         return{
