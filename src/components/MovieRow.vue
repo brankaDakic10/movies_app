@@ -9,7 +9,7 @@
     <div class="col-sm" v-text="movie.releaseDate"></div>
     <div class="col-sm" v-text="movie.duration"></div> 
     <div class="col-sm">
-     <b-button
+     <b-button 
        type="submit"
        variant="primary"
        @click="onSelected">

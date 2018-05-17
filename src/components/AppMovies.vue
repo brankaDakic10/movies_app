@@ -7,18 +7,36 @@
         ></movie-form>
         <section class="container mt-4">
         <h4>List of Movies</h4>
-        
+        <div>
+             <b-button
+       type="submit"
+       variant="info"
+      @click="selectAll">
+      Select All
+      </b-button>
+       <b-button
+       type="submit"
+       variant="info"
+      @click="deselectAll" >
+      Deselect All
+      </b-button>
+        </div>
+        <br>
         <movie-search @search-term-change="onSearchTermChanged"></movie-search>
         <br>
         <input class="form-control" v-model="searchTerm" type="text" placeholder="Search movie title"/>
+       
+        
         <br>
         <div v-if="selectedMoviesIds.length">Number of selected movies: {{ selectedMoviesCounter }}</div>
 
         
         
-        <movie-row v-for="movie in filterProducts" :key="movie.id"
+        <movie-row v-for="movie in filterProducts" 
+        :key="movie.id"
         :movie="movie"
-          @on-selected-movie="onSelectedMovie"></movie-row>
+          @on-selected-movie="onSelectedMovie"
+          :class="{ 'highlighted': allSelected }"></movie-row>
        
         <div  v-if="!filterProducts.length" class="alert alert-danger" role="alert">
              This movie title is not included in the list of movies!
@@ -51,7 +69,8 @@ export default {
             releaseDate:'',
             genre:'' 
           },
-          searchTerm:''
+          searchTerm:'',
+          allSelected:false
         }
     },
     methods:{
@@ -73,6 +92,12 @@ export default {
         }
         this.selectedMoviesIds.push(movie.id)
     },
+      selectAll(){
+          this.allSelected=true
+      },
+      deselectAll(){
+          this.allSelected=false
+      }
 
     },
     computed:{
@@ -102,5 +127,7 @@ export default {
 </script>
 
 <style>
-
+.highlighted {
+  background: rgb(126, 212, 238);
+}
 </style>
