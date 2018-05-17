@@ -11,12 +11,14 @@
         <movie-search @search-term-change="onSearchTermChanged"></movie-search>
         <br>
         <input class="form-control" v-model="searchTerm" type="text" placeholder="Search movie title"/>
-
+        <br>
+        <div v-if="selectedMoviesIds.length">Number of selected movies: {{ selectedMoviesCounter }}</div>
 
         
         
         <movie-row v-for="movie in filterProducts" :key="movie.id"
-        :movie="movie"></movie-row>
+        :movie="movie"
+          @on-selected-movie="onSelectedMovie"></movie-row>
        
         <div  v-if="!filterProducts.length" class="alert alert-danger" role="alert">
              This movie title is not included in the list of movies!
@@ -40,6 +42,7 @@ export default {
     data(){
         return{
          movies:[],
+         selectedMoviesIds:[],
          newMovie:{
             title:'',
             director:'',
@@ -64,6 +67,12 @@ export default {
            this.movies = data
         })
        },
+       onSelectedMovie(movie) {
+         if (this.selectedMoviesIds.indexOf(movie.id) > -1) {
+        return;
+        }
+        this.selectedMoviesIds.push(movie.id)
+    },
 
     },
     computed:{
@@ -71,7 +80,11 @@ export default {
        return this.movies.filter(movie =>{
            return movie.title.toLowerCase().startsWith(this.searchTerm.toLowerCase())
        })
-    }
+    },
+    selectedMoviesCounter() {
+      return this.selectedMoviesIds.length
+     }
+
    },
      beforeRouteEnter (to, from, next) {
           moviesService.getAll()
