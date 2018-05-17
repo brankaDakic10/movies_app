@@ -7,7 +7,15 @@
         ></movie-form>
         <section class="container mt-4">
         <h4>List of Movies</h4>
-        <movie-row v-for="movie in movies" :key="movie.id"
+        
+        <movie-search @search-term-change="onSearchTermChanged"></movie-search>
+        <br>
+        <input class="form-control" v-model="searchTerm" type="text" placeholder="Search movie title"/>
+
+
+        
+        
+        <movie-row v-for="movie in filterProducts" :key="movie.id"
         :movie="movie"></movie-row>
         </section>
     </div>
@@ -17,11 +25,13 @@
 import { moviesService } from '../services/MoviesService'
 import MovieForm from './MovieForm.vue'
 import MovieRow from './MovieRow.vue'
+import MovieSearch from './MovieSearch.vue'
 export default {
     name:'AppMovies',
     components:{
         MovieForm,
-        MovieRow
+        MovieRow,
+        MovieSearch
     },
     data(){
         return{
@@ -33,7 +43,8 @@ export default {
             duration:'',
             releaseDate:'',
             genre:'' 
-          }
+          },
+          searchTerm:''
         }
     },
     methods:{
@@ -42,9 +53,22 @@ export default {
     },
         resetForm(){
           return this.newMovie
-    }
+    },
+     onSearchTermChanged(term) {
+          moviesService.getAll(term)
+            .then(({ data }) => {
+           this.movies = data
+        })
+       },
 
     },
+    computed:{
+   filterProducts(){
+       return this.movies.filter(movie =>{
+           return movie.title.toLowerCase().startsWith(this.searchTerm.toLowerCase())
+       })
+    }
+   },
      beforeRouteEnter (to, from, next) {
           moviesService.getAll()
            .then((response) => {
