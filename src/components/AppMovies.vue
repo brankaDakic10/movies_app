@@ -17,6 +17,10 @@
         
         <movie-row v-for="movie in filterProducts" :key="movie.id"
         :movie="movie"></movie-row>
+       
+        <div  v-if="!filterProducts.length" class="alert alert-danger" role="alert">
+             This movie title is not included in the list of movies!
+        </div>
         </section>
     </div>
 </template>
